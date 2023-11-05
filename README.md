@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/wH6E8Dzd)
+=======
+>>>>>>> upstream/main
 # Trabalho1 AED 2023-2024
 
 Este é o código-fonte para o primeiro projeto de AED 2023-2024.
@@ -72,8 +75,17 @@ Se isso acontecer, deverá atualizar o seu repositório com os seguintes comando
 
 ```bash
 git remote add upstream git@github.com:detiuaveiro/image8bit-pub.git
+<<<<<<< HEAD
 git fetch upstream
 git rebase upstream/main
+=======
+
+git fetch upstream
+git checkout main
+git merge --allow-unrelated-histories upstream/main
+# (Resolver quaisquer conflitos que surjam...)
+git commit
+>>>>>>> upstream/main
 ```
 
 
