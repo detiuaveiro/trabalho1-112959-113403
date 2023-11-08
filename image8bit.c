@@ -11,8 +11,8 @@
 
 // Student authors (fill in below):
 // NMec:  Name:
-// José Pedro Salgado Oliveira 113403
-// 
+// 113403 José Pedro Salgado Oliveira 
+// 112959 Luis Miguel Neto Godinho 
 // 
 // 
 // Date:
@@ -169,10 +169,25 @@ void ImageInit(void) { ///
 /// (The caller is responsible for destroying the returned image!)
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageCreate(int width, int height, uint8 maxval) { ///
+
+// Insert your code here!
+
   assert (width >= 0);
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
-  // Insert your code here!
+  
+  Image img = (Image *)malloc(sizeof(Image));
+  if (img == NULL)
+  {
+    perror("ImageCreate");
+    exit(2);
+  }
+
+  img->width = width;
+  img->height = height;
+  img->maxval = maxval;
+
+return img;
 }
 
 /// Destroy the image pointed to by (*imgp).
@@ -181,8 +196,12 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 /// Ensures: (*imgp)==NULL.
 /// Should never fail, and should preserve global errno/errCause.
 void ImageDestroy(Image* imgp) { ///
+
+// Insert your code here!
   assert (imgp != NULL);
-  // Insert your code here!
+  
+  free(*imgp);
+  *imgp = NULL;
 }
 
 
@@ -295,6 +314,18 @@ int ImageMaxval(Image img) { ///
 void ImageStats(Image img, uint8* min, uint8* max) { ///
   assert (img != NULL);
   // Insert your code here!
+
+  *min = img->pixel[0];
+  *max = img->pixel[0];
+
+   for (int i = 0; i < img->width * img->height; i++) {
+    if (img->pixel[i] < min) {
+      *min = img->pixel[i];
+    }
+    if (img->pixel[i] > max) {
+      *max = img->pixel[i];
+    }
+  }  
 }
 
 /// Check if pixel position (x,y) is inside img.

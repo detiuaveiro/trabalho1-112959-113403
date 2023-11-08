@@ -14,19 +14,11 @@ TESTS = test1 test2 test3 test4 test5 test6 test7 test8 test9
 # Default rule: make all programs
 all: $(PROGS)
 
-<<<<<<< HEAD
-imageTest: imageTest.o image8bit.o instrumentation.o
-
-imageTest.o: image8bit.h instrumentation.h
-
-imageTool: imageTool.o image8bit.o instrumentation.o
-=======
 imageTest: imageTest.o image8bit.o instrumentation.o error.o
 
 imageTest.o: image8bit.h instrumentation.h
 
 imageTool: imageTool.o image8bit.o instrumentation.o error.o
->>>>>>> upstream/main
 
 imageTool.o: image8bit.h instrumentation.h
 
