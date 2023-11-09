@@ -175,17 +175,28 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (width >= 0);
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
-  
-  Image img = (Image *)malloc(sizeof(Image));
-  if (img == NULL)
-  {
-    perror("ImageCreate");
-    exit(2);
-  }
+
+  Image img = NULL; 
+  int success = check((img = (Image)malloc(sizeof(struct image))) != NULL, "Allocation failed" ) && 
+                check((img->pixel = (uint8*)malloc(width*height*sizeof(uint8))) != NULL, "Allocation failed" );
 
   img->width = width;
   img->height = height;
   img->maxval = maxval;
+
+  int size = width * height;
+
+  // Criar imagem preta
+  for (int i = 0; i < size; i++) {
+    img->pixel[i] = 0;
+    PIXMEM+=1;
+  }
+
+  if (!success) {
+    errsave = errno;
+    ImageDestroy(&img);
+    errno = errsave;
+  }
 
 return img;
 }
@@ -200,8 +211,12 @@ void ImageDestroy(Image* imgp) { ///
 // Insert your code here!
   assert (imgp != NULL);
   
-  free(*imgp);
-  *imgp = NULL;
+  if(*imgp != NULL) {
+    free((*imgp)->pixel);
+    free(*imgp);
+    *imgp = NULL;
+  }
+
 }
 
 
@@ -353,6 +368,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 static inline int G(Image img, int x, int y) {
   int index;
   // Insert your code here!
+  index = y * img->width + x;
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
