@@ -1,0 +1,10 @@
+Done:
+ImageCreate
+ImageDestroy
+ImageStats
+ImageValidRect
+ImageNegative
+
+
+To Do:
+O resto...

@@ -353,6 +353,9 @@ int ImageValidPos(Image img, int x, int y) { ///
 int ImageValidRect(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   // Insert your code here!
+  assert (w >= 0 && h >= 0);
+  assert (x >= 0 && y >= 0);
+  return (x + w <= img->width && y + h <= img->height);
 }
 
 /// Pixel get & set operations
@@ -404,6 +407,10 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
 void ImageNegative(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
+  int size = img->width * img->height;
+  for(int i = 0; i < size; i++) {
+    img->pixel[i] = PixMax - img->pixel[i];
+  }
 }
 
 /// Apply threshold to image.
@@ -411,7 +418,14 @@ void ImageNegative(Image img) { ///
 /// all pixels with level>=thr to white (maxval).
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int size = img->width * img->height;
+  for(int i = 0; i < size; i++) {
+    if(img->pixel[i] < thr) {
+      img->pixel[i] = 0;
+    } else {
+      img->pixel[i] = img->maxval;
+    }
+  }
 }
 
 /// Brighten image by a factor.
