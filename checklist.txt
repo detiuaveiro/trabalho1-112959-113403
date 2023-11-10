@@ -4,7 +4,14 @@ ImageDestroy
 ImageStats
 ImageValidRect
 ImageNegative
-
+ImageBrighten
+ImageRotate
+ImageMirror
+ImageCrop
+ImagePaste
+ImageBlend
 
 To Do:
-O resto...
+ImageMatchSubImage
+ImageLocateSubImage
+ImageBlur
