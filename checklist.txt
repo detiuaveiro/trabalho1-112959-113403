@@ -4,6 +4,7 @@ ImageDestroy
 ImageStats
 ImageValidRect
 ImageNegative
+ImageBrighten
 
 
 To Do:
