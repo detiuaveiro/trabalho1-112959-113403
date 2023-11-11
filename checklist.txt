@@ -10,8 +10,8 @@ ImageMirror
 ImageCrop
 ImagePaste
 ImageBlend
+ImageMatchSubImage
 
 To Do:
-ImageMatchSubImage
 ImageLocateSubImage
 ImageBlur

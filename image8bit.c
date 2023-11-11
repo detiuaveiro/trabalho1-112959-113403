@@ -464,7 +464,7 @@ void ImageBrighten(Image img, double factor)
   int image_size = img->width * img->height;
   for (int i = 0; i < image_size; i++)
   {
-    double new_pixel = (int)(img->pixel[i] * factor);
+    int new_pixel = (int)(img->pixel[i] * factor);
     if (new_pixel > img->maxval)
     {
       img->pixel[i] = img->maxval;
@@ -657,7 +657,27 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   assert(img1 != NULL);
   assert(img2 != NULL);
   assert(ImageValidPos(img1, x, y));
-  // Insert your code here!
+  int img2_size = img2->width * img2->height;
+  int count = 0;
+
+  for (int i = 0; i < img2->width; i++)
+  {
+    for (int j = 0; j < img2->height; j++)
+    {
+      if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j))
+      {
+        return 0;
+      }
+      else{
+        count++;
+      }
+    }
+  }
+  if (count == img2_size)
+  {
+    return 1;
+  }
+
 }
 
 /// Locate a subimage inside another image.
