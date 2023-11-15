@@ -722,15 +722,15 @@ void ImageBlur(Image img, int dx, int dy)
   assert(img != NULL);
   assert(dx >= 0 && dy >= 0);
 
-  for(int i=0;i <= img->width;i++){
-    for(int j=0;j <= img->height;j++){
+  for(int i=0;i < img->width;i++){
+    for(int j=0;j < img->height;j++){
       int sum = 0;
       int count = 0;
-      for(int k = i - dx; k <= i + dx; k++){
-        if (k >= 0){
-          for(int l = j - dy; l <= j + dy; l++){
-            if(l >= 0){
-              sum += ImageGetPixel(img, k, l);
+      for(int nx = i - dx; nx <= i + dx; nx++){
+        if (nx >= 0 && nx < img->width){
+          for(int ny = j - dy; ny <= j + dy; ny++){
+            if(ny >= 0 && ny < img->height){
+              sum += ImageGetPixel(img, nx, ny);
               count++;
             }
           }

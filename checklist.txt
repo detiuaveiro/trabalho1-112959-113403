@@ -12,7 +12,7 @@ ImagePaste
 ImageBlend
 ImageMatchSubImage(fixed)
 ImageLocateSubImage
-ImageBlur -> Se encontrares outra forma de fazer o Blue escreve em comentário, para adicionarmos ao Relatório
+ImageBlur -> Se encontrares outra forma de fazer o ImageBlur escreve em comentário, para adicionarmos ao Relatório
 
 To Do:
 
