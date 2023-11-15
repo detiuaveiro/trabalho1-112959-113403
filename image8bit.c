@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "instrumentation.h"
+#include <string.h>
 
 // The data structure
 //
@@ -722,10 +723,16 @@ void ImageBlur(Image img, int dx, int dy)
   assert(img != NULL);
   assert(dx >= 0 && dy >= 0);
 
+
+  // Create a copy of the image
+  Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+  
+
+
   for(int i=0;i < img->width;i++){
     for(int j=0;j < img->height;j++){
-      int sum = 0;
-      int count = 0;
+      double sum = 0;
+      double count = 0;
       for(int nx = i - dx; nx <= i + dx; nx++){
         if (nx >= 0 && nx < img->width){
           for(int ny = j - dy; ny <= j + dy; ny++){
@@ -736,7 +743,10 @@ void ImageBlur(Image img, int dx, int dy)
           }
         }
       }
-      ImageSetPixel(img, i, j, (sum/count)+0.5);
+      ImageSetPixel(img_copy, i, j, (uint8)((sum/count)+0.5));
     }
   }
+
+  memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));  
+
 }
