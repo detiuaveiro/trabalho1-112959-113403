@@ -464,7 +464,7 @@ void ImageBrighten(Image img, double factor)
   int image_size = img->width * img->height;
   for (int i = 0; i < image_size; i++)
   {
-    int new_pixel = (int)(img->pixel[i] * factor);
+    uint8 new_pixel = (uint8)((img->pixel[i] * factor) + 0.5);
     if (new_pixel > img->maxval)
     {
       img->pixel[i] = img->maxval;
@@ -636,7 +636,7 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha)
   {
     for (int j = 0; j < img2->height; j++)
     {
-      double new_pixel = (int)(ImageGetPixel(img1, x + i, y + j) * (1 - alpha) + ImageGetPixel(img2, i, j) * alpha);
+      uint8 new_pixel = (uint8)((ImageGetPixel(img1, x + i, y + j) * (1 - alpha) + ImageGetPixel(img2, i, j) * alpha) + 0.5);
       if (new_pixel > img1->maxval)
       {
         ImageSetPixel(img1, x + i, y + j, img1->maxval);
@@ -668,7 +668,8 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
       {
         return 0;
       }
-      else{
+      else
+      {
         count++;
       }
     }
@@ -677,7 +678,6 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   {
     return 1;
   }
-
 }
 
 /// Locate a subimage inside another image.
