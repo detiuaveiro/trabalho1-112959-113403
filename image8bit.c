@@ -359,7 +359,7 @@ void ImageStats(Image img, uint8 *min, uint8 *max)
 
 /// Check if pixel position (x,y) is inside img.
 int ImageValidPos(Image img, int x, int y)
-{ ///
+{ ///ImageVali
   assert(img != NULL);
   return (0 <= x && x < img->width) && (0 <= y && y < img->height);
 }
@@ -678,6 +678,10 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   {
     return 1;
   }
+  else
+  {
+    return 0;
+  }
 }
 
 /// Locate a subimage inside another image.
@@ -688,7 +692,22 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 { ///
   assert(img1 != NULL);
   assert(img2 != NULL);
+  int result = 0;
   // Insert your code here!
+  for (int i = 0; i < img1->width; i++)
+  {
+    for (int j = 0; j < img1->height; j++)
+    {
+      if (ImageMatchSubImage(img1, i, j, img2))
+      {
+        *px = i;
+        *py = j;
+        result = 1;
+      }
+      
+    }
+  }
+  return result;
 }
 
 /// Filtering
@@ -700,4 +719,24 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 void ImageBlur(Image img, int dx, int dy)
 { ///
   // Insert your code here!
+  assert(img != NULL);
+  assert(dx >= 0 && dy >= 0);
+
+  for(int i=0;i <= img->width;i++){
+    for(int j=0;j <= img->height;j++){
+      int sum = 0;
+      int count = 0;
+      for(int k = i - dx; k <= i + dx; k++){
+        if (k >= 0){
+          for(int l = j - dy; l <= j + dy; l++){
+            if(l >= 0){
+              sum += ImageGetPixel(img, k, l);
+              count++;
+            }
+          }
+        }
+      }
+      ImageSetPixel(img, i, j, (sum/count)+0.5);
+    }
+  }
 }

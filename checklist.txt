@@ -10,8 +10,10 @@ ImageMirror
 ImageCrop
 ImagePaste
 ImageBlend
-ImageMatchSubImage
-
-To Do:
+ImageMatchSubImage(fixed)
 ImageLocateSubImage
 ImageBlur
+
+To Do:
+
+Relatório
