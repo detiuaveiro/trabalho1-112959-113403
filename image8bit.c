@@ -749,4 +749,7 @@ void ImageBlur(Image img, int dx, int dy)
 
   memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));  
 
+  free(img_copy->pixel);
+  free(img_copy);
+
 }
