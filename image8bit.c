@@ -666,7 +666,11 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   {
     for (int j = 0; j < img2->height; j++)
     {
-      if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j))
+      if (x+i >= img1->width || y+j >= img1->height)      //condição para não sair dos limites da imagem
+      {
+        return 0;
+      }
+      else if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j))
       {
         return 0;
       }
@@ -694,6 +698,7 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 { ///
   assert(img1 != NULL);
   assert(img2 != NULL);
+
   int result = 0;
   // Insert your code here!
   for (int i = 0; i < img1->width; i++)
@@ -705,10 +710,11 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
         *px = i;
         *py = j;
         result = 1;
-        break;                                           // Para sair do ciclo for quando encontar a imagem
+        break; // Para sair do ciclo for quando encontar a imagem
       }
     }
   }
+  return result;
 }
 
 /// Filtering
