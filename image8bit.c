@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include "instrumentation.h"
 #include <string.h>
-#include <time.h>
 
 // The data structure
 //
@@ -361,7 +360,7 @@ void ImageStats(Image img, uint8 *min, uint8 *max)
 
 /// Check if pixel position (x,y) is inside img.
 int ImageValidPos(Image img, int x, int y)
-{ /// ImageVali
+{ ///ImageVali
   assert(img != NULL);
   return (0 <= x && x < img->width) && (0 <= y && y < img->height);
 }
@@ -666,11 +665,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   {
     for (int j = 0; j < img2->height; j++)
     {
-      if (x+i >= img1->width || y+j >= img1->height)      //condição para não sair dos limites da imagem
-      {
-        return 0;
-      }
-      else if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j))
+      if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j))
       {
         return 0;
       }
@@ -698,7 +693,6 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 { ///
   assert(img1 != NULL);
   assert(img2 != NULL);
-
   int result = 0;
   // Insert your code here!
   for (int i = 0; i < img1->width; i++)
@@ -710,8 +704,8 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
         *px = i;
         *py = j;
         result = 1;
-        break; // Para sair do ciclo for quando encontar a imagem
       }
+      
     }
   }
   return result;
@@ -729,35 +723,32 @@ void ImageBlur(Image img, int dx, int dy)
   assert(img != NULL);
   assert(dx >= 0 && dy >= 0);
 
+
   // Create a copy of the image
   Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+  
 
-  for (int i = 0; i < img->width; i++)
-  {
-    for (int j = 0; j < img->height; j++)
-    {
+
+  for(int i=0;i < img->width;i++){
+    for(int j=0;j < img->height;j++){
       double sum = 0;
       double count = 0;
-      for (int nx = i - dx; nx <= i + dx; nx++)
-      {
-        if (nx >= 0 && nx < img->width)
-        {
-          for (int ny = j - dy; ny <= j + dy; ny++)
-          {
-            if (ny >= 0 && ny < img->height)
-            {
+      for(int nx = i - dx; nx <= i + dx; nx++){
+        if (nx >= 0 && nx < img->width){
+          for(int ny = j - dy; ny <= j + dy; ny++){
+            if(ny >= 0 && ny < img->height){
               sum += ImageGetPixel(img, nx, ny);
               count++;
             }
           }
         }
       }
-      ImageSetPixel(img_copy, i, j, (uint8)((sum / count) + 0.5));
+      ImageSetPixel(img_copy, i, j, (uint8)((sum/count)+0.5));
     }
   }
 
-  memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
+  
+  memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));  
+  ImageDestroy(&img_copy);
 
-  free(img_copy->pixel);
-  free(img_copy);
 }
