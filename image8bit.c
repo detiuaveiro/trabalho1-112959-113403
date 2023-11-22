@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include "instrumentation.h"
 #include <string.h>
-#include <time.h>
 
 // The data structure
 //
