@@ -757,5 +757,54 @@ void ImageBlur(Image img, int dx, int dy)
 
   memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
   ImageDestroy(&img_copy);
-  
+
+  // assert(img != NULL);
+  // assert(dx >= 0 && dy >= 0);
+
+  // int width = img->width;
+  // int height = img->height;
+
+  // // Create a copy of the image
+  // Image img_copy = ImageCreate(width, height, img->maxval);
+
+  // // Horizontal Blur
+  // for (int y = 0; y < height; y++)
+  // {
+  //   for (int x = 0; x < width; x++)
+  //   {
+  //     double sum = 0;
+  //     double count = 0;
+  //     for (int nx = x - dx; nx <= x + dx; nx++)
+  //     {
+  //       if (nx >= 0 && nx < width)
+  //       {
+  //         sum += ImageGetPixel(img, nx, y);
+  //         count++;
+  //       }
+  //     }
+  //     ImageSetPixel(img_copy, x, y, (uint8)((sum / count) + 0.5));
+  //   }
+  // }
+
+  // // Vertical Blur
+  // for (int x = 0; x < width; x++)
+  // {
+  //   for (int y = 0; y < height; y++)
+  //   {
+  //     double sum = 0;
+  //     double count = 0;
+  //     for (int ny = y - dy; ny <= y + dy; ny++)
+  //     {
+  //       if (ny >= 0 && ny < height)
+  //       {
+  //         sum += ImageGetPixel(img_copy, x, ny);
+  //         count++;
+  //       }
+  //     }
+  //     ImageSetPixel(img, x, y, (uint8)((sum / count) + 0.5));
+  //   }
+  // }
+
+  // // Destroy the temporary copy
+  // ImageDestroy(&img_copy);
 }
