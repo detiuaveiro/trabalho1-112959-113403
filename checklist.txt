@@ -14,6 +14,7 @@ ImageMatchSubImage(fixed)
 ImageLocateSubImage
 ImageBlur -> Se encontrares outra forma de fazer o ImageBlur escreve em comentário, para adicionarmos ao Relatório
 No Blur tá uma versao otimizada comentada, mas ainda n esta a funcionar, se conseguires dar fix era top
+Não consegui dar fix á função mas fiz uma versao mais atualizada utilizando o metodo integral image.
 
 To Do:
 

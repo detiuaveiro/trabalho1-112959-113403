@@ -723,46 +723,52 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy)
-{ ///
+{ 
+  ///////////////////////////////////////////////////////////Primeira_Versão/////////////////////////////////////////////////////////// 
   // Insert your code here!
-  assert(img != NULL);
-  assert(dx >= 0 && dy >= 0);
+  // assert(img != NULL);
+  // assert(dx >= 0 && dy >= 0);
 
-  // Create a copy of the image
-  Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+  // // Create a copy of the image
+  // Image img_copy = ImageCreate(img->width, img->height, img->maxval);
 
-  for (int i = 0; i < img->width; i++)
-  {
-    for (int j = 0; j < img->height; j++)
-    {
-      double sum = 0;
-      double count = 0;
-      for (int nx = i - dx; nx <= i + dx; nx++)
-      {
-        if (nx >= 0 && nx < img->width)
-        {
-          for (int ny = j - dy; ny <= j + dy; ny++)
-          {
-            if (ny >= 0 && ny < img->height)
-            {
-              sum += ImageGetPixel(img, nx, ny);
-              count++;
-            }
-          }
-        }
-      }
-      ImageSetPixel(img_copy, i, j, (uint8)((sum / count) + 0.5));
-    }
-  }
+  // for (int i = 0; i < img->width; i++)
+  // {
+  //   for (int j = 0; j < img->height; j++)
+  //   {
+  //     double sum = 0;
+  //     double count = 0;
+  //     for (int nx = i - dx; nx <= i + dx; nx++)
+  //     {
+  //       if (nx >= 0 && nx < img->width)
+  //       {
+  //         for (int ny = j - dy; ny <= j + dy; ny++)
+  //         {
+  //           if (ny >= 0 && ny < img->height)
+  //           {
+  //             sum += ImageGetPixel(img, nx, ny);
+  //             count++;
+  //           }
+  //         }
+  //       }
+  //     }
+  //     ImageSetPixel(img_copy, i, j, (uint8)((sum / count) + 0.5));
+  //   }
+  // }
 
-  memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
-  ImageDestroy(&img_copy);
+  // memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
+  // ImageDestroy(&img_copy);
+
+
+  //////////////////////////////////////////////////////////////Segunda_versão(com erro)/////////////////////////////////////////////////////////////////////
 
   // assert(img != NULL);
   // assert(dx >= 0 && dy >= 0);
 
   // int width = img->width;
   // int height = img->height;
+  // double sum;
+  // double count;
 
   // // Create a copy of the image
   // Image img_copy = ImageCreate(width, height, img->maxval);
@@ -772,8 +778,8 @@ void ImageBlur(Image img, int dx, int dy)
   // {
   //   for (int x = 0; x < width; x++)
   //   {
-  //     double sum = 0;
-  //     double count = 0;
+  //     sum = 0;
+  //     count = 0;
   //     for (int nx = x - dx; nx <= x + dx; nx++)
   //     {
   //       if (nx >= 0 && nx < width)
@@ -791,8 +797,8 @@ void ImageBlur(Image img, int dx, int dy)
   // {
   //   for (int y = 0; y < height; y++)
   //   {
-  //     double sum = 0;
-  //     double count = 0;
+  //     sum = 0;
+  //     count = 0;
   //     for (int ny = y - dy; ny <= y + dy; ny++)
   //     {
   //       if (ny >= 0 && ny < height)
@@ -807,4 +813,124 @@ void ImageBlur(Image img, int dx, int dy)
 
   // // Destroy the temporary copy
   // ImageDestroy(&img_copy);
+
+////////////////////////////////////////////////////////////////////Terceira_Versão////////////////////////////////////////////////////////////////////////
+
+  assert(img != NULL);
+  assert(dx >= 0 && dy >= 0);
+
+  int width = img->width;
+  int height = img->height;
+  int nx, ny;
+  int x, y;
+  int npixel;
+
+  int nw = width + 2 * dx;
+  int nh = height + 2 * dy;
+
+  // Sum table para integral image
+  int **summedAreaTable = (int **)malloc(nh * sizeof(int *));
+
+  if (summedAreaTable == NULL)
+  {
+    perror("Erro na alocacao de memoria");
+    exit(1);
+  }
+
+  for (int i = 0; i < nh; ++i)
+  {
+    summedAreaTable[i] = (int *)malloc(nw * sizeof(int));
+    if (summedAreaTable[i] == NULL)
+    {
+      perror("Erro na alocacao de memoria");
+      exit(1);
+    }
+  }
+
+  double area = (2 * dx + 1) * (2 * dy + 1);
+
+  // Criar a integral image
+  for (y = 0; y < nh; y++)
+  {
+    for (x = 0; x < nw; x++)
+    {
+      if (x < dx) // x encontra-se na margem esquerda
+      {
+        nx = 0;
+      }
+      else if (x - dx >= width) // x encontra-se na margem direita
+      {
+        nx = width - 1;
+      }
+      else // x encontra-se no meio da imagem
+      {
+        nx = x - dx;
+      }
+
+      if (y < dy) // y encontra-se na margem superior
+      {
+        ny = 0;
+      }
+      else if (y - dy >= height) // y encontra-se na margem inferior
+      {
+        ny = height - 1;
+      }
+      else // y encontra-se no meio da imagem
+      {
+        ny = y - dy;
+      }
+
+      npixel = ImageGetPixel(img, nx, ny);
+
+      if (x > 0)
+      {
+        npixel += summedAreaTable[y][x - 1];
+      }
+      if (y > 0)
+      {
+        npixel += summedAreaTable[y - 1][x];
+      }
+      if (x > 0 && y > 0)
+      {
+        npixel -= summedAreaTable[y - 1][x - 1];
+      }
+
+      summedAreaTable[y][x] = npixel;
+    }
+  }
+
+  // Calcular a média e aplicar na imagem
+  for (y = 0; y < height; y++)
+  {
+    for (x = 0; x < width; x++)
+    {
+      int nx = x + 2 * dx;
+      int ny = y + 2 * dy;
+
+      int sum = summedAreaTable[ny][nx];
+
+      if (x > 0)
+      {
+        sum -= summedAreaTable[ny][x - 1];
+      }
+      if (y > 0)
+      {
+        sum -= summedAreaTable[y - 1][nx];
+      }
+      if (x > 0 && y > 0)
+      {
+        sum += summedAreaTable[y - 1][x - 1];
+      }
+
+      ImageSetPixel(img, x, y, (uint8)((sum / area) + 0.5));
+    }
+  }
+
+  // Free allocated memory
+  for (int i = 0; i < nh; ++i)
+  {
+    free(summedAreaTable[i]);
+  }
+  free(summedAreaTable);
+  summedAreaTable = NULL;
 }
