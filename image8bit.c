@@ -823,12 +823,14 @@ void ImageBlur(Image img, int dx, int dy)
   int nx, ny;
   int x, y;
   int npixel;
+  int A, B, C, D, sum;
+  int rectWidth, rectHeight;
 
   int nw = width + 2 * dx;
   int nh = height + 2 * dy;
 
   // Sum table para integral image
-  int **summedAreaTable = (int **)malloc(nh * sizeof(int *));
+  int **summedAreaTable = (int **)malloc(nw * sizeof(int *));
 
   if (summedAreaTable == NULL)
   {
@@ -836,9 +838,9 @@ void ImageBlur(Image img, int dx, int dy)
     exit(1);
   }
 
-  for (int i = 0; i < nh; ++i)
+  for (int i = 0; i < nw; ++i)
   {
-    summedAreaTable[i] = (int *)malloc(nw * sizeof(int));
+    summedAreaTable[i] = (int *)malloc(nh * sizeof(int));
     if (summedAreaTable[i] == NULL)
     {
       perror("Erro na alocacao de memoria");
@@ -848,7 +850,7 @@ void ImageBlur(Image img, int dx, int dy)
 
   double area = (2 * dx + 1) * (2 * dy + 1);
 
-  // Criar a integral image
+  // Calculate the summed area table of the rectangle
   for (y = 0; y < nh; y++)
   {
     for (x = 0; x < nw; x++)
@@ -881,49 +883,50 @@ void ImageBlur(Image img, int dx, int dy)
 
       npixel = ImageGetPixel(img, nx, ny);
 
-    //Preprocessing
-
       if (x > 0)
       {
-        npixel += summedAreaTable[y][x - 1];
+        npixel += summedAreaTable[x - 1][y];
       }
       if (y > 0)
       {
-        npixel += summedAreaTable[y - 1][x];
+        npixel += summedAreaTable[x][y - 1];
       }
       if (x > 0 && y > 0)
       {
-        npixel -= summedAreaTable[y - 1][x - 1];
+        npixel -= summedAreaTable[x - 1][y - 1];
       }
 
-      summedAreaTable[y][x] = npixel;
+      summedAreaTable[x][y] = npixel;
     }
   }
 
-  // Calcular a média e aplicar na imagem
-  for (y = 0; y < height; y++)
+  // Calculate the integral image of the rectangle
+  for (int rectPosY = 0; rectPosY < height; rectPosY++)
   {
-    for (x = 0; x < width; x++)
+    for (int rectPosX = 0; rectPosX < width; rectPosX++)
     {
-      int nx = x + 2 * dx;
-      int ny = y + 2 * dy;
+      rectWidth =2 * dx;
+      rectHeight =2 * dy;
 
-      int sum = summedAreaTable[ny][nx];
+      A = 0, B = 0, C = 0, D = 0, sum = 0;
 
-      if (x > 0)
+      if (rectPosX > 0 && rectPosY > 0)
       {
-        sum -= summedAreaTable[ny][x - 1];
+        A = summedAreaTable[rectPosX - 1][rectPosY - 1];
       }
-      if (y > 0)
+      if (rectPosX > 0)
       {
-        sum -= summedAreaTable[y - 1][nx];
+        B = summedAreaTable[rectPosX - 1][rectPosY + rectHeight];
       }
-      if (x > 0 && y > 0)
+      if (rectPosY > 0)
       {
-        sum += summedAreaTable[y - 1][x - 1];
+        C = summedAreaTable[rectPosX + rectWidth][rectPosY - 1];
       }
+      D = summedAreaTable[rectPosX + rectWidth][rectPosY + rectHeight];
 
-      ImageSetPixel(img, x, y, (uint8)((sum / area) + 0.5));
+      sum = A - B - C + D;
+
+      ImageSetPixel(img, rectPosX, rectPosY, (uint8)((sum / area) + 0.5));
     }
   }
 
