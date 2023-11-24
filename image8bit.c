@@ -723,8 +723,8 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy)
-{ 
-  ///////////////////////////////////////////////////////////Primeira_Versão/////////////////////////////////////////////////////////// 
+{
+  ///////////////////////////////////////////////////////////Primeira_Versão///////////////////////////////////////////////////////////
   // Insert your code here!
   // assert(img != NULL);
   // assert(dx >= 0 && dy >= 0);
@@ -758,7 +758,6 @@ void ImageBlur(Image img, int dx, int dy)
 
   // memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
   // ImageDestroy(&img_copy);
-
 
   //////////////////////////////////////////////////////////////Segunda_versão(com erro)/////////////////////////////////////////////////////////////////////
 
@@ -814,7 +813,7 @@ void ImageBlur(Image img, int dx, int dy)
   // // Destroy the temporary copy
   // ImageDestroy(&img_copy);
 
-////////////////////////////////////////////////////////////////////Terceira_Versão////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////Terceira_Versão////////////////////////////////////////////////////////////////////////
 
   assert(img != NULL);
   assert(dx >= 0 && dy >= 0);
@@ -854,7 +853,7 @@ void ImageBlur(Image img, int dx, int dy)
   {
     for (x = 0; x < nw; x++)
     {
-      if (x < dx) // x encontra-se na margem esquerda
+      if (x - dx < 0) // x encontra-se na margem esquerda
       {
         nx = 0;
       }
@@ -867,7 +866,7 @@ void ImageBlur(Image img, int dx, int dy)
         nx = x - dx;
       }
 
-      if (y < dy) // y encontra-se na margem superior
+      if (y - dy < 0) // y encontra-se na margem superior
       {
         ny = 0;
       }
@@ -881,6 +880,8 @@ void ImageBlur(Image img, int dx, int dy)
       }
 
       npixel = ImageGetPixel(img, nx, ny);
+
+    //Preprocessing
 
       if (x > 0)
       {
