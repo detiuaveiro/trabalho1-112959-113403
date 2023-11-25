@@ -759,7 +759,6 @@ void ImageBlur(Image img, int dx, int dy)
   // memcpy(img->pixel, img_copy->pixel, img->width * img->height * sizeof(uint8));
   // ImageDestroy(&img_copy);
 
-  
   ////////////////////////////////////////////////////////////////////Segunda_Versão////////////////////////////////////////////////////////////////////////
 
   assert(img != NULL);
@@ -767,14 +766,14 @@ void ImageBlur(Image img, int dx, int dy)
 
   int width = img->width;
   int height = img->height;
-  int nx, ny;
+  int nx, ny;             // new x and new y
   int x, y;
-  int npixel;
-  int A, B, C, D, sum;
-  int rectWidth, rectHeight;
+  int npixel;             // pixel value
+  int A, B, C, D, sum;    // sum of pixels
+  int rectWidth = 2 * dx, rectHeight = 2 * dy;  // rectangle width and height
 
-  int nw = width + 2 * dx;
-  int nh = height + 2 * dy;
+  int nw = width + rectWidth;       // new width
+  int nh = height + rectHeight;     // new height
 
   // Sum table para integral image
   int **summedAreaTable = (int **)malloc(nw * sizeof(int *));
@@ -797,7 +796,7 @@ void ImageBlur(Image img, int dx, int dy)
 
   double area = (2 * dx + 1) * (2 * dy + 1);
 
-  // Calculate the summed area table of the rectangle
+  // Ciar um array expandido com os valores da imagem original
   for (y = 0; y < nh; y++)
   {
     for (x = 0; x < nw; x++)
@@ -830,6 +829,18 @@ void ImageBlur(Image img, int dx, int dy)
 
       npixel = ImageGetPixel(img, nx, ny);
 
+      summedAreaTable[x][y] = npixel;
+    }
+  }
+
+  // Calculate summed area table
+  for (int x = 0; x < nw; x++)
+  {
+    for (int y = 0; y < nh; y++)
+    {
+      npixel = 0;
+
+      npixel = summedAreaTable[x][y];
       if (x > 0)
       {
         npixel += summedAreaTable[x - 1][y];
@@ -847,14 +858,11 @@ void ImageBlur(Image img, int dx, int dy)
     }
   }
 
-  // Calculate the integral image of the rectangle
+  // Calculate the sum of pixels
   for (int Y = 0; Y < height; Y++)
   {
     for (int X = 0; X < width; X++)
     {
-      rectWidth =2 * dx;
-      rectHeight =2 * dy;
-
       A = 0, B = 0, C = 0, D = 0, sum = 0;
 
       if (X > 0 && Y > 0)
