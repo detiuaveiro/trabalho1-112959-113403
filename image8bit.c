@@ -838,35 +838,29 @@ void ImageBlur(Image img, int dx, int dy)
   {
     for (x = 0; x < nw; x++)
     {
-      if (x - dx < 0) // x encontra-se na margem esquerda
+      nx = x - dx;
+      ny = y - dy;
+
+      if (nx < 0) // x encontra-se na margem esquerda
       {
         nx = 0;
       }
-      else if (x - dx >= width) // x encontra-se na margem direita
+      else if (nx >= width) // x encontra-se na margem direita
       {
         nx = width - 1;
       }
-      else // x encontra-se no meio da imagem
-      {
-        nx = x - dx;
-      }
 
-      if (y - dy < 0) // y encontra-se na margem superior
+      if (ny < 0) // y encontra-se na margem superior
       {
         ny = 0;
       }
-      else if (y - dy >= height) // y encontra-se na margem inferior
+      else if (ny >= height) // y encontra-se na margem inferior
       {
         ny = height - 1;
       }
-      else // y encontra-se no meio da imagem
-      {
-        ny = y - dy;
-      }
 
-      npixel = ImageGetPixel(img, nx, ny);
-
-      summedAreaTable[x][y] = npixel;
+      summedAreaTable[x][y] = ImageGetPixel(img, nx, ny);
+      
     }
   }
 
