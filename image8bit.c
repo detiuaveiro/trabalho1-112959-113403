@@ -848,32 +848,32 @@ void ImageBlur(Image img, int dx, int dy)
   }
 
   // Calculate the integral image of the rectangle
-  for (int rectPosY = 0; rectPosY < height; rectPosY++)
+  for (int Y = 0; Y < height; Y++)
   {
-    for (int rectPosX = 0; rectPosX < width; rectPosX++)
+    for (int X = 0; X < width; X++)
     {
       rectWidth =2 * dx;
       rectHeight =2 * dy;
 
       A = 0, B = 0, C = 0, D = 0, sum = 0;
 
-      if (rectPosX > 0 && rectPosY > 0)
+      if (X > 0 && Y > 0)
       {
-        A = summedAreaTable[rectPosX - 1][rectPosY - 1];
+        A = summedAreaTable[X - 1][Y - 1];
       }
-      if (rectPosX > 0)
+      if (X > 0)
       {
-        B = summedAreaTable[rectPosX - 1][rectPosY + rectHeight];
+        B = summedAreaTable[X - 1][Y + rectHeight];
       }
-      if (rectPosY > 0)
+      if (Y > 0)
       {
-        C = summedAreaTable[rectPosX + rectWidth][rectPosY - 1];
+        C = summedAreaTable[X + rectWidth][Y - 1];
       }
-      D = summedAreaTable[rectPosX + rectWidth][rectPosY + rectHeight];
+      D = summedAreaTable[X + rectWidth][Y + rectHeight];
 
       sum = A - B - C + D;
 
-      ImageSetPixel(img, rectPosX, rectPosY, (uint8)((sum / area) + 0.5));
+      ImageSetPixel(img, X, Y, (uint8)((sum / area) + 0.5));
     }
   }
 
