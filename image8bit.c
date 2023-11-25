@@ -699,20 +699,57 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
   assert(img2 != NULL);
 
   int result = 0;
+  int ncomp = 0;
   // Insert your code here!
-  for (int i = 0; i < img1->width; i++)
+
+  ///////////////////////////////////////////////////////////Primeira_Versão///////////////////////////////////////////////////////////
+  // for (int i = 0; i < img1->width; i++)
+  // {
+  //   for (int j = 0; j < img1->height; j++)
+  //   {
+  //     ncomp++;
+  //     if (ImageMatchSubImage(img1, i, j, img2))
+  //     {
+  //       *px = i;
+  //       *py = j;
+  //       result = 1;
+  //       break; // Para sair do ciclo for quando encontar a imagem
+  //     }
+  //   }
+  // }
+  // printf("\nncomp = %d\n", ncomp);
+  // return result;
+
+
+  ////////////////////////////////////////////////////////////////////Segunda_Versão///////////////////////////////////////////////////
+  int img1Width = img1->width;
+  int img1Height = img1->height;
+  int img2Width = img2->width;
+  int img2Height = img2->height;
+
+  // Verificação preliminar
+  if (img1Width < img2Width || img1Height < img2Height)
+    return 0;
+
+  for (int i = 0; i <= img1Width - img2Width; i++)
   {
-    for (int j = 0; j < img1->height; j++)
+    for (int j = 0; j <= img1Height - img2Height; j++)
     {
+      ncomp++;
+      // Verificação preliminar antes de chamar ImageMatchSubImage
       if (ImageMatchSubImage(img1, i, j, img2))
       {
         *px = i;
         *py = j;
         result = 1;
-        break; // Para sair do ciclo for quando encontar a imagem
+        printf("\nncomp = %d\n", ncomp);
+        return result; // Podemos sair imediatamente quando encontramos a subimagem
       }
     }
   }
+  printf("\nncomp = %d\n", ncomp);
+  free(ncomp);
+  
   return result;
 }
 
