@@ -74,9 +74,9 @@ test9: $(PROGS) setup
 	cmp blur.pgm test/blur.pgm
 
 test10: $(PROGS) setup
-	./imageTool test/small.pgm test/original.pgm paste 100,100 save paste.pgm
+	./imageTool test/crop2.pgm test/crop1.pgm paste 8690,5993 save paste.pgm
 	cmp paste.pgm test/paste.pgm
-	./imageTool tic test/small.pgm toc paste.pgm locate
+	./imageTool tic test/crop2.pgm toc paste.pgm locate
 
 .PHONY: tests
 tests: $(TESTS)

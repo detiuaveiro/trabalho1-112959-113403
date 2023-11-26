@@ -667,6 +667,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2)
   {
     for (int j = 0; j < img2->height; j++)
     {
+      NUMCOMP++;
       if (x + i >= img1->width || y + j >= img1->height) // condição para não sair dos limites da imagem
       {
         return 0;
@@ -701,25 +702,6 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
   assert(img2 != NULL);
 
   int result = 0;
-  // Insert your code here!
-
-  ///////////////////////////////////////////////////////////Primeira_Versão///////////////////////////////////////////////////////////
-  // for (int i = 0; i < img1->width; i++)
-  // {
-  //   for (int j = 0; j < img1->height; j++)
-  //   {
-  //     ncomp++;
-  //     if (ImageMatchSubImage(img1, i, j, img2))
-  //     {
-  //       *px = i;
-  //       *py = j;
-  //       result = 1;
-  //       break; // Para sair do ciclo for quando encontar a imagem
-  //     }
-  //   }
-  // }
-  // printf("\nncomp = %d\n", ncomp);
-  // return result;
 
 
   ////////////////////////////////////////////////////////////////////Segunda_Versão///////////////////////////////////////////////////
@@ -747,7 +729,6 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
       }
     }
   }
-  
   return result;
 }
 
