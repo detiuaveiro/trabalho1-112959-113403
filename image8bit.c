@@ -148,11 +148,13 @@ void ImageInit(void)
 { ///
   InstrCalibrate();
   InstrName[0] = "pixmem"; // InstrCount[0] will count pixel array acesses
+  InstrName[1] = "numcomp";
   // Name other counters here...
 }
 
 // Macros to simplify accessing instrumentation counters:
 #define PIXMEM InstrCount[0]
+#define NUMCOMP InstrCount[1]
 // Add more macros here...
 
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
@@ -699,7 +701,6 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
   assert(img2 != NULL);
 
   int result = 0;
-  int ncomp = 0;
   // Insert your code here!
 
   ///////////////////////////////////////////////////////////Primeira_Versão///////////////////////////////////////////////////////////
@@ -735,20 +736,17 @@ int ImageLocateSubImage(Image img1, int *px, int *py, Image img2)
   {
     for (int j = 0; j <= img1Height - img2Height; j++)
     {
-      ncomp++;
+      NUMCOMP++;
       // Verificação preliminar antes de chamar ImageMatchSubImage
       if (ImageMatchSubImage(img1, i, j, img2))
       {
         *px = i;
         *py = j;
         result = 1;
-        printf("\nncomp = %d\n", ncomp);
         return result; // Podemos sair imediatamente quando encontramos a subimagem
       }
     }
   }
-  printf("\nncomp = %d\n", ncomp);
-  free(ncomp);
   
   return result;
 }
@@ -901,7 +899,7 @@ void ImageBlur(Image img, int dx, int dy)
         A = summedAreaTable[X - 1][Y - 1];
       }
       if (X > 0)
-      {
+      { 
         B = summedAreaTable[X - 1][Y + rectHeight];
       }
       if (Y > 0)
